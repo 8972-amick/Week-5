@@ -1,0 +1,99 @@
+package com.topic.model.dao;
+
+import com.topic.model.Topic;
+import com.topic.model.dto.TopicDTO;
+import com.utils.DBConnection;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+public class TopicDAO implements TopicInterface {
+    @Override
+    public boolean insertTopic(Topic topic) {
+        if (topic.getName() == null || topic.getName().trim().isEmpty()) {
+            return false;
+        }
+        String sql = "INSERT INTO topic(name,user_id,created_at,updated_at) VALUES(?,?,NOW(),NOW()";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, topic.getName());
+            ps.setInt(2, topic.getUser_id());
+
+            int row = ps.executeUpdate();
+            return row > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public ArrayList<TopicDTO> viewAllTopics() {
+        ArrayList<TopicDTO> topics = new ArrayList<>();
+        String sql = "SELECT t.id, t.name, t.created_at, t.user_id, u.user_name, u.email, u.role FROM topic t JOIN user u ON t.user_id = u.id";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) { //checking if there is next value or not
+                TopicDTO topic = new TopicDTO(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getInt("user_id"),
+                        rs.getString("user_name"),
+                        rs.getString("email"),
+                        rs.getString("role")
+
+                );
+                topics.add(topic);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return topics;
+    }
+
+    @Override
+    public boolean updated_at(int topicId, String topicName, int userId) {
+        String sql = "UPDATE topic SET name=?, updated_at=NOW() where id=? AND user_id=?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, topicName);
+            ps.setInt(2, topicId);
+            ps.setInt(3, userId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteTopic(int topic_id, int userID) {
+        String sql = "DELETE FROM topic where id=? AND user_id=?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, topic_id);
+            ps.setInt(2, userID);
+
+            int row = ps.executeUpdate();
+            return row > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+}
