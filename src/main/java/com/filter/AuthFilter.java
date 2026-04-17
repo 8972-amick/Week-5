@@ -30,5 +30,20 @@ public class AuthFilter implements Filter {
         boolean isAuth = path.contains("user-auth");
 
         boolean isPublic = isLogin || isRegister || isIndex || isAuth;
+
+        boolean isStatic = path.endsWith(".css") ||
+                path.endsWith(".js") ||
+                path.endsWith(".jsp") ||
+                path.endsWith(".jpeg");
+
+        if (isLoggedIn && (isLogin && isRegister)) {
+            res.sendRedirect(req.getContextPath() + "/views/dashboard.jsp");
+            return;
+        }
+        if (!isLoggedIn && !(isPublic && isStatic)) {
+            res.sendRedirect(req.getContextPath() + "/views/login.jsp");
+            return;
+        }
+        filterChain.doFilter(req, res);
     }
 }
