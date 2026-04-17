@@ -21,5 +21,14 @@ public class AuthFilter implements Filter {
 
         String path = req.getRequestURI();
         HttpSession session = req.getSession(false);
+
+        boolean isLoggedIn = (session != null && session.getAttribute("user") != null);
+
+        boolean isLogin = path.endsWith("Login.jsp");
+        boolean isRegister = path.endsWith("register.jsp");
+        boolean isIndex = path.endsWith("index.jsp");
+        boolean isAuth = path.contains("user-auth");
+
+        boolean isPublic = isLogin || isRegister || isIndex || isAuth;
     }
 }
