@@ -12,5 +12,6 @@ public interface TopicInterface {
     boolean updated_at(int topicId, String topicName, int userId);
 
     boolean deleteTopic(int topic_id, int userID);
+    TopicDTO viewTopicById(int topic_id);
 
 }
