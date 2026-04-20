@@ -20,6 +20,6 @@ public class ViewTopicByIdServlet extends HttpServlet {
 
         TopicDTO topic = topicDAO.viewTopicById(topic_id);
         request.setAttribute("topic", topic);
-        request.getRequestDispatcher("views/ViewTopicById.jsp"); // dispatcher fast hunxa, server side and data transfer hunxa bbut send redirect slow hunxa, client side and data transfer gardaena
+        request.getRequestDispatcher("views/ViewTopicById.jsp").forward(request, response); // dispatcher fast hunxa, server side and data transfer hunxa bbut send redirect slow hunxa, client side and data transfer gardaena
     }
 }
