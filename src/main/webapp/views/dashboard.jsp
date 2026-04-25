@@ -37,6 +37,12 @@
     <button>Add</button>
 </form><br><br>
 
+<form action="../addTopic" method="post" enctype="multipart/form-data">
+    <input type="text" name="name" placeholder="New Topic" required/>
+    <input type="file" name="topic_image" required>
+    <button>Add</button>
+</form><br>
+
 <a href="../ViewTopics">View topics</a>
 
 <jsp:include page="footer.jsp" />

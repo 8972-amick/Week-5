@@ -15,13 +15,14 @@ public class TopicDAO implements TopicInterface {
         if (topic.getName() == null || topic.getName().trim().isEmpty()) {
             return false;
         }
-        String sql = "INSERT INTO topic(name,user_id,created_at,updated_at) VALUES(?,?,NOW(),NOW()";
+        String sql = "INSERT INTO topic(name,user_id,topic_image, created_at,updated_at) VALUES(?,?,?,NOW(),NOW()";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, topic.getName());
             ps.setInt(2, topic.getUser_id());
+            ps.setString(3, topic.getTopic_image());
 
             int row = ps.executeUpdate();
             return row > 0;
@@ -35,7 +36,7 @@ public class TopicDAO implements TopicInterface {
     @Override
     public ArrayList<TopicDTO> viewAllTopics() {
         ArrayList<TopicDTO> topics = new ArrayList<>();
-        String sql = "SELECT t.id, t.name, t.created_at, t.user_id, u.user_name, u.email, u.role FROM topic t JOIN user u ON t.user_id = u.id";
+        String sql = "SELECT t.topic_image, t.id, t.name, t.created_at, t.user_id, u.user_name, u.email, u.role FROM topic t JOIN user u ON t.user_id = u.id";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -49,7 +50,8 @@ public class TopicDAO implements TopicInterface {
                         rs.getInt("user_id"),
                         rs.getString("user_name"),
                         rs.getString("email"),
-                        rs.getString("role")
+                        rs.getString("role"),
+                        rs.getString("topic_image")
 
                 );
                 topics.add(topic);
@@ -99,13 +101,13 @@ public class TopicDAO implements TopicInterface {
 
     @Override
     public TopicDTO viewTopicById(int topic_id) {
-        String sql = "SELECT t_id, t_name, t_created_at, t.user_id, u.name as user_name, u.email, u.role, FROM topic t JOIN user u ON t.user_id = u.id where t.id = ?";
+        String sql = "SELECT t.topic_image, t_id, t_name, t_created_at, t.user_id, u.name as user_name, u.email, u.role, FROM topic t JOIN user u ON t.user_id = u.id where t.id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, topic_id);
-            ResultSet rs = ps.executeQuery();
+             ps.setInt(1, topic_id);
+             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {  // euta matra row dinxa so while loop laaunu pardaena so condition for next ma value xa xaena banera herna
+             if (rs.next()) {  // euta matra row dinxa so while loop laaunu pardaena so condition for next ma value xa xaena banera herna
                 TopicDTO topic = new TopicDTO(
                         rs.getInt("id"),
                         rs.getString("name"),
@@ -113,7 +115,8 @@ public class TopicDAO implements TopicInterface {
                         rs.getInt("user_id"),
                         rs.getString("user_name"),
                         rs.getString("email"),
-                        rs.getString("role")
+                        rs.getString("role"),
+                        rs.getString("topic_image")
                 );
                 return topic;
 
