@@ -51,7 +51,7 @@
                             <form action="${pageContext.request.contextPath}/views/updateTopic.jsp" method="get" style="display:inline;">
                                 <input type="hidden" name="id" value="${t.topic_id}"/>
                                 <input type="hidden" name="name" value="${t.topic_name}"/>
-                                <button type="submit">Update</button>
+                                <button type="submit">Update</button> // final button to update all the filels in topic
                             </form>
                         </c:when>
                         <c:otherwise>
