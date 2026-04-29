@@ -39,7 +39,7 @@ public class AuthFilter implements Filter { // acts as a middleware between the 
                 path.endsWith(".jpeg");
 
         if (isLoggedIn && (isLogin && isRegister)) {
-            res.sendRedirect(req.getContextPath() + "/views/dashboard.jsp"); webapp contents
+            res.sendRedirect(req.getContextPath() + "/views/dashboard.jsp"); // webapp contents
             return;
         }
         if (!isLoggedIn && !(isPublic && isStatic)) {
