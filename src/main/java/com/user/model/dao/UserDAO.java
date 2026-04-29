@@ -15,7 +15,7 @@ public class UserDAO implements UserInterface {
         if (user.getEmail().trim().isEmpty() || user.getPassword().trim().isEmpty()){
             return false;
         }
-        String sql = "INSERT INTO user(name,email,password,role) values(?,?,?,?)";
+        String sql = "INSERT INTO user(name,email,password,role) values(?,?,?,?)"; // parameterized query where oinput is coming from the user
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1,user.getName());
